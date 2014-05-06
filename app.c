@@ -165,9 +165,9 @@ gint main(gint argc, gchar *argv[])
 	}
 
 	/* Create and connect the Pipeline Elements 
-	 *															|| dmux.video_00 -> identity -> queue -> h264parse -> queue ||
-	 *	filesrc -> queue -> qtdemux ||																													|| flvmux -> queue -> rtmpsink
-	 *															|| dmux.audio_00	->	queue		->	aacparse		->	queue			||
+	 *                              || dmux.video_00 -> identity -> queue -> h264parse -> queue ||
+	 *	filesrc -> queue -> qtdemux ||                                                          || flvmux -> queue -> rtmpsink
+	 *                              || dmux.audio_00 -> queue   ->  aacparse    ->  queue       ||
 	 */
 	
 	
