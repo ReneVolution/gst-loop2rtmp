@@ -31,7 +31,8 @@ handle_keyboard (GIOChannel *source, GIOCondition cond, AppElements *app)
 {
   gchar *str = NULL;
    
-  if (g_io_channel_read_line (source, &str, NULL, NULL, NULL) != G_IO_STATUS_NORMAL) {
+  if (g_io_channel_read_line (source, &str, NULL, NULL, NULL) != G_IO_STATUS_NORMAL)
+	{
     return TRUE;
   }
    
@@ -64,7 +65,9 @@ bus_callback(GstBus *bus, GstMessage *msg, gpointer data)
 
     case GST_MESSAGE_SEGMENT_DONE:
       g_print ("Received SEGMENT DONE Message\n");
-      if (!gst_element_seek(app->pipeline, 1, GST_FORMAT_TIME, (GstSeekFlags)(GST_SEEK_FLAG_SEGMENT), GST_SEEK_TYPE_SET, 0, GST_SEEK_TYPE_END, 0))
+      if (!gst_element_seek(app->pipeline, 1, GST_FORMAT_TIME,
+                            (GstSeekFlags)(GST_SEEK_FLAG_SEGMENT),
+                            GST_SEEK_TYPE_SET, 0, GST_SEEK_TYPE_END, 0))
       {
         g_printerr("Seek failed!\n");
       }
@@ -203,7 +206,9 @@ gint main(gint argc, gchar *argv[])
 
 
   /* Set single segment handling */
-  g_object_set (G_OBJECT (app.identity), "single-segment", TRUE, "silent", FALSE, "sync", TRUE,  NULL);
+  g_object_set (G_OBJECT (app.identity), "single-segment", TRUE,
+                                         "silent", FALSE,
+                                         "sync", TRUE,  NULL);
 
   /* set destination server */
   g_object_set (G_OBJECT (app.rtmpsink), "location", argv[2], NULL);
@@ -239,12 +244,16 @@ gint main(gint argc, gchar *argv[])
   /* Setting up the Pipeline using Segments */
   gst_element_set_state (app.pipeline, GST_STATE_PAUSED);
   gst_element_get_state (app.pipeline, NULL, NULL, GST_CLOCK_TIME_NONE);
-  gst_element_seek(app.pipeline, 1, GST_FORMAT_TIME, (GstSeekFlags)(GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_SEGMENT), GST_SEEK_TYPE_SET, 0, GST_SEEK_TYPE_END, 0);
+  gst_element_seek(app.pipeline, 1, GST_FORMAT_TIME,
+                   (GstSeekFlags)(GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_SEGMENT),
+                   GST_SEEK_TYPE_SET, 0, GST_SEEK_TYPE_END, 0);
   gst_element_set_state (app.pipeline, GST_STATE_PLAYING);
   gst_element_get_state (app.pipeline, NULL, NULL, GST_CLOCK_TIME_NONE);
 
   /* Enable DOT File creation for debug puposes */
-  GST_DEBUG_BIN_TO_DOT_FILE_WITH_TS(GST_BIN (app.pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "loop2rtmp");
+  GST_DEBUG_BIN_TO_DOT_FILE_WITH_TS(GST_BIN (app.pipeline),
+                                    GST_DEBUG_GRAPH_SHOW_ALL,
+                                    "loop2rtmp");
 
 
   /* Add a keyboard watch so we get notified of keystrokes */
