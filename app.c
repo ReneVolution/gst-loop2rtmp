@@ -104,8 +104,8 @@ on_no_more_pads (GstElement *demuxer,
   
   /* link muxer to sink */
   gst_element_link_many (app->muxer, app->sink_q, app->rtmpsink, NULL);
-	
-	gst_element_set_state(app->sink_q, GST_STATE_PAUSED);
+  
+  gst_element_set_state(app->sink_q, GST_STATE_PAUSED);
   gst_element_set_state(app->rtmpsink, GST_STATE_PAUSED);
 
   gst_element_seek(app->pipeline, 1.0, GST_FORMAT_TIME,
@@ -273,10 +273,10 @@ gint main(gint argc, gchar *argv[])
   g_object_set (G_OBJECT (app.muxer), "streamable", TRUE, NULL);
 
 
-	/* Set SPS/PPS handling == TRUE */
-	g_object_set (G_OBJECT (app.h264parser), "config-interval", TRUE, NULL);
+  /* Set SPS/PPS handling == TRUE */
+  g_object_set (G_OBJECT (app.h264parser), "config-interval", TRUE, NULL);
 
-	/* Set single segment handling */
+  /* Set single segment handling */
   g_object_set (G_OBJECT (app.identity), "single-segment", TRUE,
                                          "silent", FALSE,
                                          "sync", TRUE,  NULL);
