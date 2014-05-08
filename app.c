@@ -104,9 +104,8 @@ on_no_more_pads (GstElement *demuxer,
   
   /* link muxer to sink */
   gst_element_link_many (app->muxer, app->sink_q, app->rtmpsink, NULL);
-
-  gst_element_set_state(app->muxer, GST_STATE_PAUSED);
-  gst_element_set_state(app->sink_q, GST_STATE_PAUSED);
+	
+	gst_element_set_state(app->sink_q, GST_STATE_PAUSED);
   gst_element_set_state(app->rtmpsink, GST_STATE_PAUSED);
 
   gst_element_seek(app->pipeline, 1.0, GST_FORMAT_TIME,
@@ -176,15 +175,16 @@ on_pad_added (GstElement *src,
     
     /* connect to h.264 decoding chain */
     gst_bin_add_many (GST_BIN (app->pipeline), app->vq_in,
-                      app->h264parser, app->vq_out, NULL);
+                      app->h264parser, app->identity, app->vq_out, NULL);
     
     /* link video elements */
-    gst_element_link_many (app->vq_in, app->h264parser, app->vq_out, app->muxer, NULL);
+    gst_element_link_many (app->vq_in, app->h264parser, app->identity, app->vq_out, app->muxer, NULL);
     sink_pad = gst_element_get_static_pad (app->vq_in, "sink");
     gst_pad_link (new_pad, sink_pad);
 
     gst_element_set_state(app->vq_in, GST_STATE_PAUSED);
     gst_element_set_state(app->h264parser, GST_STATE_PAUSED);
+    gst_element_set_state(app->identity, GST_STATE_PAUSED);
     gst_element_set_state(app->vq_out, GST_STATE_PAUSED);
 
     goto exit;
@@ -273,7 +273,10 @@ gint main(gint argc, gchar *argv[])
   g_object_set (G_OBJECT (app.muxer), "streamable", TRUE, NULL);
 
 
-  /* Set single segment handling */
+	/* Set SPS/PPS handling == TRUE */
+	g_object_set (G_OBJECT (app.h264parser), "config-interval", TRUE, NULL);
+
+	/* Set single segment handling */
   g_object_set (G_OBJECT (app.identity), "single-segment", TRUE,
                                          "silent", FALSE,
                                          "sync", TRUE,  NULL);
@@ -301,7 +304,6 @@ gint main(gint argc, gchar *argv[])
 
   /* Setting up the Pipeline using Segments */
   gst_element_set_state (app.pipeline, GST_STATE_PAUSED);
-  gst_element_get_state (app.pipeline, NULL, NULL, GST_CLOCK_TIME_NONE);
   
   /* Add a keyboard watch so we get notified of keystrokes */
 #ifdef _WIN32
