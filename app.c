@@ -67,7 +67,8 @@ bus_callback (GstBus *bus, GstMessage *msg, gpointer data)
       g_print ("Received SEGMENT DONE Message\n");
       if (!gst_element_seek(app->pipeline, 1.0, GST_FORMAT_TIME,
                             (GstSeekFlags)(GST_SEEK_FLAG_SEGMENT),
-                            GST_SEEK_TYPE_SET, 0, GST_SEEK_TYPE_END, 0))
+                            GST_SEEK_TYPE_SET, 0, GST_SEEK_TYPE_END, GST_CLOCK_TIME_NONE))
+
       {
         g_printerr("Seek failed!\n");
       }
@@ -110,7 +111,7 @@ on_no_more_pads (GstElement *demuxer,
 
   gst_element_seek(app->pipeline, 1.0, GST_FORMAT_TIME,
                    (GstSeekFlags)(GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_SEGMENT),
-                   GST_SEEK_TYPE_SET, 0, GST_SEEK_TYPE_END, 0);
+                   GST_SEEK_TYPE_SET, 0, GST_SEEK_TYPE_END, GST_CLOCK_TIME_NONE);
   
   gst_element_set_state (app->pipeline, GST_STATE_PLAYING);
   
@@ -135,7 +136,7 @@ on_pad_added (GstElement *src,
 #if (GST_VERSION_MAJOR == 1)
   new_pad_caps = gst_pad_query_caps (new_pad, NULL);
 #else
-  new_pad_caps = gst_pad_get_caps (new_pad, NULL);
+  new_pad_caps = gst_pad_get_caps (new_pad);
 #endif
 
   new_pad_struct = gst_caps_get_structure (new_pad_caps, 0);
