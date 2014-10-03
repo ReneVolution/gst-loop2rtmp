@@ -6,22 +6,21 @@
 /* Structure to contain all decoding chains */
 typedef struct _AppElements {
 
-  GMainLoop *loop;
-  GstElement *pipeline;
-  GstElement *source;
-  GstElement *src_q;
-  GstElement *demuxer;
-  GstElement *vq_in;
-  GstElement *vq_out;
-  GstElement *aq_in;
-  GstElement *aq_out;
-  GstElement *identity;
-  GstElement *h264parser;
-  GstElement *aacparser;
-  GstElement *sink_q;
-  GstElement *muxer;
-  GstElement *rtmpsink;
-
+    GMainLoop *loop;
+    GstElement *pipeline;
+    GstElement *source;
+    GstElement *src_q;
+    GstElement *demuxer;
+    GstElement *vq_in;
+    GstElement *vq_out;
+    GstElement *aq_in;
+    GstElement *aq_out;
+    GstElement *identity;
+    GstElement *h264parser;
+    GstElement *aacparser;
+    GstElement *sink_q;
+    GstElement *muxer;
+    GstElement *rtmpsink;
 } AppElements;
 
 
@@ -272,7 +271,6 @@ gint main(gint argc, gchar *argv[])
 
   /* flvmuxer settings */
   g_object_set (G_OBJECT (app.muxer), "streamable", TRUE, NULL);
-
 
   /* Set SPS/PPS handling == TRUE */
   g_object_set (G_OBJECT (app.h264parser), "config-interval", TRUE, NULL);
